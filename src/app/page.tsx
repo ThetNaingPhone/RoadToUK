@@ -1,9 +1,10 @@
 import Image from "next/image";
+import DashboardLayout from "./dashboard/page";
 
 export default function HomePage() {
   return (
     <main className="">
-      <h1 className="text-3xl font-bold">Welcome to Flowboard</h1>
+      <DashboardLayout />
     </main>
   );
 }
