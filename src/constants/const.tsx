@@ -1,15 +1,17 @@
 import { Home, Settings, Users, Globe, Bell, School } from "lucide-react";
+import { constRoutes } from "./routes/routes";
+import { constrainedMemory } from "process";
 
 
 export const sidebarLinks = [
   {
     label: "Dashboard",
-    href: "/dashboard",
+    href: constRoutes.dashboard,
     icon: Home,
   },
   {
     label: "Admin",
-    href: "/pages/admin",
+    href: constRoutes.admin,
     icon: Users,
   },
   {
@@ -19,7 +21,7 @@ export const sidebarLinks = [
   },
   {
     label: "Countries",
-    href: "/pages/countries",
+    href: "/pages/country",
     icon: Globe,
   },
   {

@@ -21,11 +21,24 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { apiClient } from '@/lib/api-client'
 
+
+interface FormKeyItem {
+  key: string
+  label?: string
+  placeholder?: string
+  type?: string
+  rules?: any
+  value?: string
+  [extra: string]: any
+}
+
 interface CoreTableProps<TData, TValue> {
   title: string
   columns: ColumnDef<TData, TValue>[]
   endpoint: string
-  fields: Record<string, string> // e.g. { name: "", code: "" }
+  fields: Record<string, string> 
+  formKey?: FormKeyItem[]
+  responseKey?: string
 }
 
 export function CoreTable<TData, TValue>({
@@ -33,6 +46,8 @@ export function CoreTable<TData, TValue>({
   columns,
   endpoint,
   fields,
+  formKey,
+  responseKey
 }: CoreTableProps<TData, TValue>) {
   const [data, setData] = useState<TData[]>([])
   const [form, setForm] = useState(fields)
@@ -44,9 +59,10 @@ export function CoreTable<TData, TValue>({
   })
 
   const load = async () => {
-    const res = await apiClient(endpoint, 'GET')
-    setData(res?.countries || res || [])
-  }
+  const res = await apiClient(endpoint, 'GET')
+  const list = responseKey ? res?.[responseKey] : Array.isArray(res) ? res : []
+  setData(list)
+}
 
   useEffect(() => {
     load()
@@ -72,12 +88,12 @@ export function CoreTable<TData, TValue>({
       <h1 className="text-xl font-bold">{title}</h1>
 
       <div className="flex gap-2">
-        {Object.entries(form).map(([key, value]) => (
+        {formKey?.map((f) => (
           <Input
-            key={key}
-            placeholder={key}
-            value={value}
-            onChange={(e) => handleInputChange(key, e.target.value)}
+            key={f.key}
+            placeholder={f.placeholder || f.key}
+            value={form[f.key] || ''}
+            onChange={(e) => handleInputChange(f.key, e.target.value)}
           />
         ))}
         <Button onClick={handleAdd}>Add</Button>

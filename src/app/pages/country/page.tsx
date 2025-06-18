@@ -13,18 +13,18 @@ export type UserTableData = {
 export const Columns: ColumnDef<UserTableData>[] = [
   {
     accessorKey: 'name',
-    header: 'User Name',
+    header: 'Name',
     cell: ({ row }) => <div>{row.getValue('name')}</div>,
   },
   {
-    accessorKey: 'email',
-    header: 'Email',
-    cell: ({ row }) => <div>{row.getValue('email')}</div>,
+    accessorKey: 'code',
+    header: 'Code',
+    cell: ({ row }) => <div>{row.getValue('code')}</div>,
   },
   {
-    accessorKey: 'passwordHash',
-    header: 'Password Hash',
-    cell: ({ row }) => <div>{row.getValue('passwordHash')}</div>,
+    accessorKey: 'description',
+    header: 'Description',
+    cell: ({ row }) => <div>{row.getValue('description')}</div>,
   },
 ]
 
@@ -37,16 +37,16 @@ export const formKey = [
     rules: { required: true, message: 'Required' },
   },
   {
-    key: 'email',
-    label: 'Email',
-    placeholder: 'Enter Email',
+    key: 'code',
+    label: 'Code',
+    placeholder: 'Enter Code',
     type: 'input',
     rules: { required: true, message: 'Required' },
   },
   {
-    key: 'password',
-    label: 'Password',
-    placeholder: 'Enter Password',
+    key: 'description',
+    label: 'Description',
+    placeholder: 'Enter Description',
     type: 'input',
     rules: { required: true, message: 'Required' },
   },
@@ -57,12 +57,12 @@ const fields = Object.fromEntries(formKey.map((f) => [f.key, '']))
 export default function UserPage() {
   return (
     <CoreTable<UserTableData, unknown>
-      title="Users"
+      title="Country"
       columns={Columns}
-      endpoint="/api/users"
+      endpoint="/api/country"
       fields={fields}
       formKey={formKey}
-      responseKey="users"
+      responseKey="country"
     />
   )
 }

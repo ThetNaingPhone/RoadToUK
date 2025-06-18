@@ -9,10 +9,10 @@ import prisma from '@/lib/prisma'
 export const POST = apiHandlerNoAuth({
   POST: async (req) => {
     const { email, password } = await req.json()
-    const user = await prisma.user.findUnique({
+    const user = await prisma.admin.findUnique({
       where: { email },
     });
-if (!user || !user.password || !(await bcrypt.compare(password, user.password))) {
+if (!user || !user.passwordHash || !(await bcrypt.compare(password, user.passwordHash))) {
   return new NextResponse('Unauthorized', { status: 401 })
 }
     const cookieStore = await cookies();

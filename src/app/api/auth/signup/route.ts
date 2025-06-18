@@ -10,7 +10,7 @@ export const POST = apiHandlerNoAuth({
     const exists = await db.user.findUnique({ where: { email } })
     if (exists) return new NextResponse('Email exists', { status: 400 })
     const pw = await bcrypt.hash(password, 10)
-    const user = await db.user.create({ data: {name,   email, password: pw } })
+    const user = await db.user.create({ data: { name, email, passwordHash: pw } })
     return NextResponse.json({ id: user.id })
   }
 })

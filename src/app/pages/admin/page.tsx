@@ -6,8 +6,9 @@ import { useEffect,useState } from 'react'
 export default function AdminPage() {
   const [s,setS] = useState<{totalUsers:number,totalTasks:number}|null>(null)
   const [err,setErr] = useState('')
+
   useEffect(()=>{
-    apiClient('/api/admin/stats','GET').then(setS).catch(e=>setErr(e.message))
+    apiClient('/api/admin','GET').then(setS).catch(e=>setErr(e.message))
   },[])
   if(err) return <p className="text-red-500 p-6">{err}</p>
   return s && (

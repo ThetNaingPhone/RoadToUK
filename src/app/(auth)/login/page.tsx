@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { apiClient } from '@/lib/api-client'
 import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { constRoutes } from '@/constants/routes/routes'
 
 export default function Login() {
   const [email,setEmail]=useState(''), [password,setPassword]=useState(''), [err,setErr]=useState('')
@@ -12,7 +13,7 @@ export default function Login() {
     e.preventDefault()
     try {
       await apiClient('/api/auth/login','POST',{email,password})
-      router.push('/tasks')
+      router.push('/dashboard')
     } catch(err:any){ setErr(err.message) }
   }
   return (

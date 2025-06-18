@@ -11,25 +11,24 @@ export default function SignupPage() {
   const router = useRouter()
 
   const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
+  e.preventDefault()
+  setError('')
 
-    const res = await fetch('/api/auth/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password }),
-    })
+  const res = await fetch('/api/auth/signup', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email, password }),  // send password, not passwordHash
+  })
 
-    const data = await res.json()
+  const data = await res.json()
 
-    if (!res.ok) {
-      setError(data.error || 'Signup failed')
-      return
-    }
-
-    // Redirect to login page
-    router.push('/login')
+  if (!res.ok) {
+    setError(data.error || 'Signup failed')
+    return
   }
+
+  router.push('/login')
+}
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
