@@ -29,6 +29,7 @@ export const POST = apiHandlerWithAuth({
       console.error('Error in POST /api/country:', e)
       return NextResponse.json({ error: e.message }, { status: 500 })
     }
+    
   }
 })
 

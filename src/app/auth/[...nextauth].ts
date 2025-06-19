@@ -15,7 +15,7 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials) return null;
-        const user = await prisma.user.findUnique({
+        const user = await prisma.admin.findUnique({
           where: { email: credentials.email },
         });
         if (!user || !user.passwordHash) return null;

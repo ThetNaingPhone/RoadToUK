@@ -19,7 +19,7 @@ export function middleware(request: NextRequest) {
   // Example auth check (adjust to your logic)
   const userId = request.cookies.get('userId')
   if (!userId) {
-    return NextResponse.redirect(new URL('/auth/login', request.url))
+    return NextResponse.redirect(new URL('/login', request.url))
   }
 
   return NextResponse.next()

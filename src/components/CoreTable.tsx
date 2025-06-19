@@ -41,7 +41,7 @@ interface CoreTableProps<TData, TValue> {
   responseKey?: string
 }
 
-export function CoreTable<TData, TValue>({
+export function CoreTable<TData extends Row<TData>, TValue>({
   title,
   columns,
   endpoint,
