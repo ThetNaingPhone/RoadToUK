@@ -3,7 +3,7 @@
 export default function Dashboard() {
 
   return (
-    <div className="flex h-screen">
+    <div className="">
       Hello
     </div>
   )

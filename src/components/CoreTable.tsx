@@ -36,10 +36,13 @@ interface CoreTableProps<TData, TValue> {
   title: string
   columns: ColumnDef<TData, TValue>[]
   endpoint: string
-  fields: Record<string, string> 
+  fields: Record<string, string>
   formKey?: FormKeyItem[]
   responseKey?: string
+  searchKey?: { key: string; label: string; placeholder: string }[]
 }
+
+type Row<T = any> = { id: string };
 
 export function CoreTable<TData extends Row<TData>, TValue>({
   title,
@@ -47,7 +50,8 @@ export function CoreTable<TData extends Row<TData>, TValue>({
   endpoint,
   fields,
   formKey,
-  responseKey
+  responseKey,
+  searchKey,
 }: CoreTableProps<TData, TValue>) {
   const [data, setData] = useState<TData[]>([])
   const [form, setForm] = useState(fields)
@@ -59,10 +63,12 @@ export function CoreTable<TData extends Row<TData>, TValue>({
   })
 
   const load = async () => {
-  const res = await apiClient(endpoint, 'GET')
-  const list = responseKey ? res?.[responseKey] : Array.isArray(res) ? res : []
-  setData(list)
-}
+    const res = await apiClient(endpoint, 'GET', {
+      ...searchKey?.reduce((acc, { key }) => ({ ...acc, [key]: form[key] }), {}), 
+    })
+    const list = responseKey ? res?.[responseKey] : Array.isArray(res) ? res : []
+    setData(list)
+  }
 
   useEffect(() => {
     load()
@@ -87,7 +93,7 @@ export function CoreTable<TData extends Row<TData>, TValue>({
     <div className="p-6 space-y-4">
       <h1 className="text-xl font-bold">{title}</h1>
 
-      <div className="flex gap-2">
+      {/* <div className="flex gap-2">
         {formKey?.map((f) => (
           <Input
             key={f.key}
@@ -97,6 +103,17 @@ export function CoreTable<TData extends Row<TData>, TValue>({
           />
         ))}
         <Button onClick={handleAdd}>Add</Button>
+      </div> */}
+
+      <div className="flex gap-2">
+        {searchKey?.map((f) => (
+          <Input
+            key={f.key}
+            placeholder={f.placeholder || f.label}
+            onChange={(e) => handleInputChange(f.key, e.target.value)}
+          />
+        ))}
+        <Button onClick={load}>Search</Button>
       </div>
 
       <Table>
@@ -108,6 +125,7 @@ export function CoreTable<TData extends Row<TData>, TValue>({
                   {flexRender(header.column.columnDef.header, header.getContext())}
                 </TableHead>
               ))}
+              <TableHead>Action</TableHead>
             </TableRow>
           ))}
         </TableHeader>
@@ -119,9 +137,16 @@ export function CoreTable<TData extends Row<TData>, TValue>({
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}
-              {/* Add delete button per row if desired */}
               {'id' in row.original && (
-                <TableCell>
+                <TableCell className='flex gap-2'>
+                  <Button
+                    // className="mr-2"
+                    onClick={() => {
+                      
+                    }}
+                  >
+                    Update
+                  </Button>
                   <Button
                     variant="destructive"
                     onClick={() => handleDelete((row.original as any).id)}

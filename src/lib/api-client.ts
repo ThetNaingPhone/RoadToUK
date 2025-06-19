@@ -1,12 +1,17 @@
-import { constRoutes } from "@/constants/routes/routes";
-
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
 export async function apiClient<T = any>(
     url: string,
     method: Method,
+    requestParams: Record<string, any> = {},
     body?: any
 ): Promise<T> {
+    // Add query params for GET requests
+    if (method === 'GET' && Object.keys(requestParams).length > 0) {
+        const params = new URLSearchParams(requestParams).toString();
+        url += (url.includes('?') ? '&' : '?') + params;
+    }
+
     const options: RequestInit = {
         method,
         headers: {

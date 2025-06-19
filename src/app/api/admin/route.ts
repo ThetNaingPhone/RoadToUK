@@ -4,12 +4,21 @@ import bcrypt from 'bcryptjs'
 import { NextResponse } from 'next/server'
 
 export const GET = apiHandlerWithAuth({
-  GET: async (_req, user) => {
+  GET: async (req, user) => {
     if (user.role !== 'SUPER_ADMIN') {
       return new NextResponse('Forbidden', { status: 403 })
     }
-    const users = await db.user.count(), admin = await db.admin.count()
-    return NextResponse.json({ totalUsers: users, admin: admin })
+
+    const { searchParams } = new URL(req.url)
+    const username = searchParams.get('username')
+    const email = searchParams.get('email')
+
+    const where: any = {}
+    if (username) where.username = { contains: username, mode: 'insensitive' }
+    if (email) where.email = { contains: email, mode: 'insensitive' }
+
+    const admin = await db.admin.findMany({ where })
+    return NextResponse.json({ admin })
   }
 })
 
